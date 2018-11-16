@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+    <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+    <property name="hibernate.connection.url">jdbc:oracle:thin:@192.168.1.16:1521:tmsfinaldb</property>
+    <property name="hibernate.connection.username">darkoobuser</property>
+    <property name="hibernate.connection.password">darkoobpass</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <mapping class="entity.Ttestcasefile"/>
+    <mapping class="entity.Tprerequisite"/>
+    <mapping class="entity.Trequirement"/>
+    <mapping class="entity.Towner"/>
+    <mapping class="entity.Trequirementfile"/>
+    <mapping class="entity.TprojecttreeReq"/>
+    <mapping class="entity.Tbugcomment"/>
+    <mapping class="entity.Tversionfile"/>
+    <mapping class="entity.Titeration"/>
+    <mapping class="entity.TtestcaseIter"/>
+    <mapping class="entity.Tprojecttreetype"/>
+    <mapping class="entity.Tproject"/>
+    <mapping class="entity.Tbugstate"/>
+    <mapping class="entity.Tbugtype"/>
+    <mapping class="entity.Tversion"/>
+    <mapping class="entity.Tbug"/>
+    <mapping class="entity.Tintegratedpart"/>
+    <mapping class="entity.Ttestcase"/>
+    <mapping class="entity.Tprojectfile"/>
+    <mapping class="entity.Tbugfile"/>
+    <mapping class="entity.Tprojecttree"/>
+    <mapping class="entity.TtestcaseProjecttree"/>
+    <mapping class="entity.Tuser"/>
+    <mapping class="entity.TbugVersion"/>
+    <mapping class="entity.TversionProjecttree"/>
+    <mapping class="entity.Tbughistoy"/>
+  </session-factory>
+</hibernate-configuration>

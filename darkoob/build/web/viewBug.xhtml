@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>نمایش خطا</title>
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <p:growl id="growl" showDetail="true" />
+
+            <p:tabView>
+                <p:tab title="توضیحات خطا">
+                    <h:form>
+                        <div class="formWrapper">
+                            <table>
+                                <tr>
+                                    <td>
+                                        منتسب شده به
+                                        <c:if test="#{bugControl.bug.ttestcaseIter != null}">
+                                            مورد تست:
+                                        </c:if>
+                                        <c:if test="#{bugControl.bug.tprojecttree != null}">
+                                            درخت پروژه:
+                                        </c:if>
+                                    </td>
+                                    <td colspan="3">
+                                        <c:if test="#{bugControl.bug.ttestcaseIter != null}">
+                                            <p:commandButton value="نمایش مورد تست" actionListener="#{testcaseControl.viewTestcaseDialog(bugControl.bug.ttestcaseIter.ttestcase)}" />
+                                        </c:if>
+                                        <c:if test="#{bugControl.bug.tprojecttree != null}">
+                                            #{bugControl.bug.tprojecttree.tprojecttree.name} - #{bugControl.bug.tprojecttree.name}
+                                        </c:if>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>ثبت کننده خطا:</td>
+                                    <td colspan="3">
+                                        <h:outputText value="#{bugControl.bug.tuser.fullname}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نوع خطا:</td>
+                                    <td colspan="3">
+                                        <h:outputText value="#{bugControl.bug.tbugtype.name}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>عنوان خطا:</td>
+                                    <td colspan="3">
+                                        <h:outputText value="#{bugControl.bug.title}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;">توضیحات خطا:</td>
+                                    <td colspan="3">
+                                        <h:outputText value="#{bugControl.bug.description}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;">نتیجه مشاهده شده:</td>
+                                    <td colspan="3">
+                                        <h:outputText value="#{bugControl.bug.result}" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="dialogActions">
+                            <p:commandButton class="btn btnDefault" actionListener="#{bugControl.closeDialog('viewBug')}" value="بازگشت" />
+                        </div>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="نظرات">
+                    <h:form>
+                        <div class="tableWrapper noHeader">
+                            <p:dataTable value="#{bugControl.bugComments}" id="commenttable" var="comments" emptyMessage="برای این خطا نظری ثبت نشده است.">
+                                <p:column width="200">
+                                    #{comments.tuser.fullname}
+                                    <h:outputText class="breakLine" value="#{comments.bugcomment}" />
+                                </p:column>
+
+                                <p:column class="colActions" width="60">
+                                    <p:commandButton class="fa fa-pencil" title="ویرایش" actionListener="#{bugControl.viewEditCommentDialog(comments)}">
+                                        <p:ajax event="dialogReturn" update="commenttable" />
+                                    </p:commandButton>
+                                    <p:commandButton title="حذف" class="fa fa-trash" action="#{bugControl.removeComment(comments)}" onclick="if (!confirm('آیا از حذف نظر اطمینان دارید؟'))
+                                                return false;" update="commenttable" />
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+
+                        <div class="formWrapper" style="margin: 20px 0 0;">
+                            <table class="fullWidth">
+                                <tr>
+                                    <td>نظر:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea id="cm" value="#{bugControl.bugComment}" rows="5" counter="commentCounter" maxlength="4000" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText id="commentCounter" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="dialogActions">
+                            <p:commandButton class="btn btnDefault" action="#{bugControl.insertComment()}" value="ثبت نظر" update="commenttable cm" />
+                        </div>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="بارگیری/بارگذاری فایل">
+                    <h:form enctype="multipart/form-data">
+                        <p:fileUpload fileUploadListener="#{bugControl.upload}" label="انتخاب فایل" sizeLimit="1000000" auto="true" update="downloadTable" />
+
+                        <div class="tableWrapper">
+                            <p:dataTable id="downloadTable" value="#{bugControl.bugFiles}" var="file" emptyMessage="موردی با این مشخصات یافت نشد.">
+                                <p:column>
+                                    <f:facet name="header">نام فایل</f:facet>
+                                        #{file.filename}
+                                </p:column>
+
+                                <p:column class="colActions" width="100">
+                                    <f:facet name="header">بارگیری</f:facet>
+                                    <p:commandButton title="بارگیری فایل" class="fa fa-download" action="#{bugControl.download(file)}" />
+                                    <p:commandButton title="حذف فایل" class="fa fa-trash" action="#{bugControl.remove(file)}" update="downloadTable" />
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </div>
+    </h:body>
+
+</html>

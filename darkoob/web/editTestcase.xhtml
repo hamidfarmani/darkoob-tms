@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ویرایش مورد تست</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"></p:ajaxStatus>
+        <p:dialog id="statusDialog" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="/images/ajax-loader.gif" />
+        </p:dialog>
+        <div class="dialogContainer">
+            <p:tabView>
+                <p:tab title="مشخصات عمومی">
+                    <h:form>
+                        <p:growl id="growl" showDetail="true" />
+                        <div class="formWrapper">
+                            <table>
+                                <tr>
+                                    <td>نوع مورد تست:</td>
+                                    <td colspan="2">
+                                        <p:selectOneRadio id="testType" value="#{testcaseControl.testcase.testcasetype}">
+                                            <f:selectItem itemLabel="ساده" itemValue="S" />
+                                            <f:selectItem itemLabel="یکپارچگی" itemValue="I" />
+                                        </p:selectOneRadio>
+                                    </td>
+                                    <td>نحوه اجرای مورد تست:</td>
+                                    <td colspan="2">
+                                        <p:selectOneRadio id="executationType" value="#{testcaseControl.testcase.executationtype}">
+                                            <f:selectItem itemLabel="دستی" itemValue="M" />
+                                            <f:selectItem itemLabel="اتوماتیک" itemValue="A" />
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نوع سناریو:</td>
+                                    <td colspan="2">
+                                        <p:selectManyCheckbox id="testcaseType" value="#{testcaseControl.types}">
+                                            <f:selectItem itemLabel="مثبت" itemValue="P" />
+                                            <f:selectItem itemLabel="منفی" itemValue="N" />
+                                            <f:selectItem itemLabel="استثنا" itemValue="E" />
+                                        </p:selectManyCheckbox>
+                                    </td>
+                                    <td>اجباری:</td>
+                                    <td colspan="2">
+                                        <p:selectBooleanCheckbox value="#{testcaseControl.testcase.mandatory}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>اولویت:</td>
+                                    <td colspan="2">
+                                        <h:inputText value="#{testcaseControl.testcase.priority}" maxlength="2" converterMessage="در اولویت فقط مقدار عددی وارد نمایید." validatorMessage="اولویت باید عددی بین یک تا ده باشد.">
+                                            <f:validateDoubleRange minimum="1" maximum="10" />
+                                        </h:inputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>هدف تست:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea value="#{testcaseControl.testcase.purpose}" rows="5" counter="purCounter" maxlength="500" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText id="purCounter" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>عنوان مورد تست:</td>
+                                    <td colspan="2">
+                                        <h:inputText value="#{testcaseControl.testcase.title}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>سناریوی تست:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea value="#{testcaseControl.testcase.testscenario}" rows="5" counter="desCounter" maxlength="4000" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText id="desCounter" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نتیجه مورد انتظار:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea value="#{testcaseControl.testcase.prospectresult}" rows="5" counter="resCounter" maxlength="1000" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText id="resCounter" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="dialogActions">
+                            <p:commandButton class="btn btnDefault" value="ویرایش" action="#{testcaseControl.update()}" update="growl" />
+                            <p:commandButton class="btn btnDefault" actionListener="#{testcaseControl.closeDialog('editTestcase')}" value="بازگشت" />
+                        </div>
+                    </h:form>
+                </p:tab>
+
+                <p:tab title="بارگیری/بارگذاری فایل">
+                    <h:form enctype="multipart/form-data">
+                        <p:fileUpload fileUploadListener="#{testcaseControl.upload}" label="انتخاب فایل" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" auto="true" update="downloadTable" />
+
+                        <div class="tableWrapper">
+                            <p:dataTable id="downloadTable" value="#{testcaseControl.testcaseFiles}" var="file" dir="rtl" emptyMessage="موردی با این مشخصات یافت نشد.">
+                                <p:column>
+                                    <f:facet name="header">نام فایل</f:facet>
+                                        #{file.filename}
+                                </p:column>
+                                <p:column class="colActions" width="120">
+                                    <f:facet name="header">بارگیری</f:facet>
+                                    <h:commandButton value="بارگیری فایل" action="#{testcaseControl.download(file)}" />
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </div>
+    </h:body>
+</html>

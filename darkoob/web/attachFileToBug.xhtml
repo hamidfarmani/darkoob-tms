@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>انتساب فایل به خطا</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form enctype="multipart/form-data">
+                <p:fileUpload fileUploadListener="#{bugControl.upload}" label="انتخاب فایل" sizeLimit="1000000" auto="true" update="downloadTable" />
+
+                <div class="tableWrapper">
+                    <p:dataTable id="downloadTable" value="#{bugControl.bugFiles}" var="file" emptyMessage="موردی با این مشخصات یافت نشد.">
+                        <p:column>
+                            <f:facet name="header">نام فایل</f:facet>
+                                #{file.filename}
+                        </p:column>
+
+                        <p:column class="colActions" width="100">
+                            <f:facet name="header">بارگیری</f:facet>
+                            <p:commandButton title="بارگیری فایل" class="fa fa-download" action="#{bugControl.download(file)}" />
+                            <p:commandButton title="حذف فایل" class="fa fa-trash" action="#{bugControl.remove(file)}" update="downloadTable" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+            <h:form>
+                <div class="dialogActions">
+                    <p:commandButton class="btn btnDefault" actionListener="#{bugControl.closeDialog('attachFileToBug')}" value="بازگشت" />
+                </div>
+            </h:form>
+
+        </div>
+        <script src="resources/style/classie.js"></script>
+        <script src="resources/style/selectFx.js"></script>
+        <script>
+            (function () {
+                [].slice.call(document.querySelectorAll('select.cs-select')).forEach(function (el) {
+                    new SelectFx(el);
+                });
+            })();
+
+        </script>
+    </h:body>
+
+</html>

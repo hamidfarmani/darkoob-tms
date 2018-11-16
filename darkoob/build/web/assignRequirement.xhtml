@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>انتساب نیازمندی به درخت پروژه</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form>
+                <p:growl id="growl" showDetail="true" />
+                <div class="formWrapper">
+                    <table class="fullWidth">
+                        <tr>
+                            <td>نام پروژه:</td>
+                            <td colspan="3">
+                                <p:selectOneMenu value="#{requirementControl.projectID}">
+                                    <p:ajax listener="#{requirementControl.onProjectChange()}" update="projecttree" />
+                                    <f:selectItems value="#{requirementControl.projectComboItem}" />
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <p:tree dir="rtl" id="projecttree" value="#{requirementControl.root}" var="node" selectionMode="checkbox" selection="#{requirementControl.selectedNodes}">
+                                    <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                        <h:outputText value="#{node.getName()}" />
+                                    </p:treeNode>
+                                </p:tree>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="dialogActions">
+                    <p:commandButton class="btn btnDefault" value="ویرایش" action="#{requirementControl.assignToProjectTree()}" update="growl" />
+                    <p:commandButton class="btn btnDefault" actionListener="#{requirementControl.closeDialog('assignRequirement')}" value="بازگشت" />
+                </div>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

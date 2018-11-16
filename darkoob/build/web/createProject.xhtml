@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>اضافه کردن پروژه جدید</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form>
+                <p:growl id="growl" showDetail="true" />
+                <div class="formWrapper">
+                    <table class="fullWidth">
+                        <tr>
+                            <td>نام کارفرما:</td>
+                            <td colspan="3">
+                                <p:selectOneMenu value="#{projectControl.ownerID}" effect="fade" filter="true" filterMatchMode="startsWith">
+                                    <f:selectItems value="#{projectControl.allOwnersList}" />
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>نام پروژه:</td>
+                            <td colspan="3">
+                                <h:inputText value="#{projectControl.project.name}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>توضیحات:</td>
+                            <td colspan="5">
+                                <p:inputTextarea value="#{projectControl.project.description}" rows="5" counter="display" maxlength="500" counterTemplate="{0}" autoResize="false" />
+                                <h:outputText class="counter" id="display" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="dialogActions">
+                    <p:commandButton class="btn btnDefault" value="ثبت" action="#{projectControl.insertProject()}" update="growl" />
+                    <p:commandButton class="btn btnDefault" actionListener="#{projectControl.closeDialog('createProject')}" value="بازگشت" />
+                </div>
+            </h:form>
+        </div>
+        <script src="resources/style/classie.js"></script>
+        <script src="resources/style/selectFx.js"></script>
+        <script>
+            (function () {
+                [].slice.call(document.querySelectorAll('select.cs-select')).forEach(function (el) {
+                    new SelectFx(el);
+                });
+            })();
+
+        </script>
+    </h:body>
+
+</html>

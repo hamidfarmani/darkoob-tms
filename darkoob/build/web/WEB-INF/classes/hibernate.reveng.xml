@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-schema="DARKOOBUSER"/>
+  <table-filter match-name="TBUGTYPE"/>
+  <table-filter match-name="TITERATION"/>
+  <table-filter match-name="TVERSION_PROJECTTREE"/>
+  <table-filter match-name="TTESTCASE"/>
+  <table-filter match-name="TBUGCOMMENT"/>
+  <table-filter match-name="TTESTCASEFILE"/>
+  <table-filter match-name="TVERSIONFILE"/>
+  <table-filter match-name="TPROJECTTREE"/>
+  <table-filter match-name="TBUG_VERSION"/>
+  <table-filter match-name="TUSER"/>
+  <table-filter match-name="TBUG"/>
+  <table-filter match-name="TPREREQUISITE"/>
+  <table-filter match-name="TBUGHISTOY"/>
+  <table-filter match-name="TTESTCASE_PROJECTTREE"/>
+  <table-filter match-name="TINTEGRATEDPART"/>
+  <table-filter match-name="TPROJECTTREE_REQ"/>
+  <table-filter match-name="TBUGFILE"/>
+  <table-filter match-name="TOWNER"/>
+  <table-filter match-name="TTESTCASE_ITER"/>
+  <table-filter match-name="TVERSION"/>
+  <table-filter match-name="TBUGSTATE"/>
+  <table-filter match-name="TREQUIREMENTFILE"/>
+  <table-filter match-name="TPROJECTFILE"/>
+  <table-filter match-name="TPROJECTTREETYPE"/>
+  <table-filter match-name="TPROJECT"/>
+  <table-filter match-name="TREQUIREMENT"/>
+</hibernate-reverse-engineering>

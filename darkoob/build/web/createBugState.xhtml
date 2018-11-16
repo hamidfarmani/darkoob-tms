@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>اضافه کردن وضعیت خطای جدید</title>
+	<link rel="stylesheet" href="assets/css/dialogs.css" />
+</h:head>
+<h:body>
+	<div class="dialogContainer">
+		<h:form>
+			<p:growl id="growl" showDetail="true" />
+
+			<div class="formWrapper">
+				<table class="fullWidth">
+					<tr>
+						<td>عنوان:</td>
+						<td colspan="3">
+							<h:inputText value="#{bugStateControl.bugState.name}" />
+						</td>
+					</tr>
+					<tr>
+						<td>توضیحات:</td>
+						<td colspan="5">
+							<p:inputTextarea value="#{bugStateControl.bugState.description}" rows="5" counter="descCounter" maxlength="500" counterTemplate="{0}" autoResize="false" />
+							<h:outputText class="counter" id="descCounter" />
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="dialogActions">
+				<p:commandButton class="btn btnDefault" value="ثبت وضعیت خطا" action="#{bugStateControl.insertBugState()}" update="growl" />
+				<p:commandButton class="btn btnDefault" actionListener="#{bugControl.closeDialog('createBugState')}" value="بازگشت" />
+			</div>
+		</h:form>
+	</div>
+</h:body>
+
+</html>

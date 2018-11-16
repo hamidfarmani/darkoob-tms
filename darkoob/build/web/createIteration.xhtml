@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>اضافه کردن تکرار تست جدید</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form>
+                <p:tabView>
+                    <p:tab title="مشخصات عمومی تکرار">
+                        <p:growl id="growl" showDetail="true" />
+                        <div class="formWrapper">
+                            <table>
+                                <tr>
+                                    <td>
+                                        نام پروژه:
+                                    </td>
+                                    <td colspan="3">
+                                        <p:selectOneMenu value="#{iterationControl.projectID}">
+                                            <p:ajax listener="#{iterationControl.onProjectChange}" update="version testcaseTable" />
+                                            <f:selectItems value="#{iterationControl.projectComboItem}" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        نام نسخه:
+                                    </td>
+                                    <td colspan="3">
+                                        <p:selectOneMenu id="version" value="#{iterationControl.versionID}">
+                                            <f:selectItems value="#{iterationControl.versionItems}" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        نام تکرار:
+                                    </td>
+                                    <td colspan="3">
+                                        <h:inputText value="#{iterationControl.iteration.name}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        توضیحات:
+                                    </td>
+                                    <td colspan="5">
+                                        <h:inputTextarea value="#{iterationControl.iteration.description}" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </p:tab>
+
+                    <p:tab title="انتخاب سناریو های تکرار">
+                        <div class="tableWrapper">
+                            <p:dataTable scrollRows="20" scrollable="true" scrollHeight="150" value="#{iterationControl.scenarioListInIteraion}" id="testcaseTable" var="testcases" filterEvent="enter" selection="#{iterationControl.selectedTestcaseList}" rowKey="#{testcases.id}" emptyMessage="مورد تستی وجود ندارد.">
+                                <p:column selectionMode="multiple" />
+                                <p:column filterBy="#{testcases.id}" filterMatchMode="contains" width="100" filterStyle="width: 70px;">
+                                    <f:facet name="header">شناسه مورد تست</f:facet>
+                                    <h:outputText value="#{testcases.id}" />
+                                </p:column>
+                                <p:column filterBy="#{testcases.title}" filterMatchMode="contains" width="300" filterStyle="width: 250;">
+                                    <f:facet name="header">عنوان مورد تست</f:facet>
+                                    <h:outputText value="#{testcases.title}" />
+                                </p:column>
+
+                                <p:column class="colActions" width="80">
+                                    <p:commandButton class="fa fa-eye" title="نمایش مورد تست" oncomplete="PF('tcmodal').show();" update="modal">
+                                        <f:setPropertyActionListener value="#{testcases}" target="#{iterationControl.selectedTestcase}" />
+                                    </p:commandButton>
+                                    <p:dialog header="مورد تست #{testcases.title}" id="modal" widgetVar="tcmodal" modal="true" dynamic="true" resizable="false">
+                                        <h:outputText value="شناسه: " />
+                                        <h:outputText value="#{iterationControl.selectedTestcase.id}" /> <br></br><br></br>
+                                        <h:outputText value="عنوان: " />
+                                        <h:outputText value="#{iterationControl.selectedTestcase.title}" /> <br></br><br></br>
+                                        <h:outputText value="سناریو تست: " />
+                                        <h:outputText value="#{iterationControl.selectedTestcase.testscenario}" /> <br></br><br></br>
+                                        <h:outputText value="نتیجه مورد انتظار: " />
+                                        <h:outputText value="#{iterationControl.selectedTestcase.prospectresult}" /> <br></br><br></br>
+                                    </p:dialog>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        <div class="dialogActions">
+                            <p:commandButton class="btn btnDefault" value="ثبت" action="#{iterationControl.insertIteration()}" update="growl" />
+                            <p:commandButton class="btn btnDefault" actionListener="#{iterationControl.closeDialog('createIteration')}" value="بازگشت" />
+                        </div>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

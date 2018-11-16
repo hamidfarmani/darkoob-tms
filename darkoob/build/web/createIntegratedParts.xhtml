@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>مشخص کردن ارتباطات بین درخت پروژه</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+
+    </h:head>
+    <h:body>
+        <h:form id="form" dir="rtl">
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" ></p:ajaxStatus>
+            <p:dialog id="statusDialog" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage name="/images/ajax-loader.gif" />
+            </p:dialog>
+            <p:growl id="growl" showDetail="true"/>
+            <table dir="ltr">
+                <tr>
+                    <td colspan="100">
+                        <p:outputPanel style="height: 400px;overflow: auto;">
+                            <p:tree id="projecttree1" value="#{projectTreeControl.root}" var="node" selectionMode="single"
+                                    selection="#{projectTreeControl.selectedNode}" dynamic="false">
+                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                    <h:outputText value="#{node.getName()}" />
+                                </p:treeNode>
+                            </p:tree>
+                        </p:outputPanel>
+                    </td>
+
+                    <td colspan="100">
+                        <p:outputPanel style="height: 400px;overflow: auto;">
+                            <p:tree id="projecttree2" value="#{projectTreeControl.root}" var="node" selectionMode="checkbox"
+                                    selection="#{projectTreeControl.selectedNodes}" dynamic="false">
+                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                    <h:outputText value="#{node.getName()}" />
+                                </p:treeNode>
+                            </p:tree>
+                        </p:outputPanel>
+
+                    </td>
+                </tr>
+            </table>
+            <p:commandButton class="btnb" value="ثبت" actionListener="#{projectTreeControl.insertIntegratedParts()}" update="growl"/>
+            <p:commandButton class="btnb" actionListener="#{projectTreeControl.closeDialog('createIntegratedParts')}" value="بازگشت"/>
+        </h:form>
+    </h:body>
+</html>
+

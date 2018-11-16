@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>نمایش مورد تست</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"></p:ajaxStatus>
+        <p:dialog id="statusDialog" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage name="/images/ajax-loader.gif" />
+        </p:dialog>
+        <div class="dialogContainer">
+            <h:form>
+                <p:growl id="growl" showDetail="true" />
+                <div class="formWrapper">
+                    <table>
+                        <tr>
+                            <td>نوع مورد تست:</td>
+                            <td>
+                                <c:if test="#{testcaseControl.testcase.testcasetype eq 'S'}">
+                                    <h:outputText value="ساده" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.testcasetype eq 'I'}">
+                                    <h:outputText value="یکپارچگی" />
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>نحوه اجرای مورد تست:</td>
+                            <td>
+                                <c:if test="#{testcaseControl.testcase.executationtype eq 'M'}">
+                                    <h:outputText value="دستی" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.executationtype eq 'A'}">
+                                    <h:outputText value="اتوماتیک" />
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>نوع سناریو:</td>
+                            <td>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'P'}">
+                                    <h:outputText value="مثبت" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'N'}">
+                                    <h:outputText value="منفی" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'E'}">
+                                    <h:outputText value="استثنا" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'M'}">
+                                    <h:outputText value="مثبت، منفی" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'S'}">
+                                    <h:outputText value="مثبت، استثنا" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'G'}">
+                                    <h:outputText value="منفی، استثنا" />
+                                </c:if>
+                                <c:if test="#{testcaseControl.testcase.scenariotype eq 'F'}">
+                                    <h:outputText value="مثبت، منفی، استثنا" />
+                                </c:if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>اجباری:</td>
+                            <td>
+                                <p:selectBooleanCheckbox disabled="true" value="#{testcaseControl.testcase.mandatory}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>اولویت:</td>
+                            <td>
+                                <h:outputText value="#{testcaseControl.testcase.priority}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>هدف تست:</td>
+                            <td>
+                                <h:outputText value="#{testcaseControl.testcase.purpose}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>عنوان سناریو:</td>
+                            <td>
+                                <h:outputText value="#{testcaseControl.testcase.title}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>سناریوی تست:</td>
+                            <td>
+                                <h:outputText value="#{testcaseControl.testcase.testscenario}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>نتیجه مورد انتظار:</td>
+                            <td>
+                                <h:outputText value="#{testcaseControl.testcase.prospectresult}" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="dialogActions">
+                    <p:commandButton class="btn btnDefault" actionListener="#{testcaseControl.closeDialog('viewTestcase')}" value="بازگشت" />
+                </div>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

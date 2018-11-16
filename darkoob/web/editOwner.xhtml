@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>ویرایش کارفرما</title>
+        <link rel="stylesheet" href="assets/css/main2.css" />
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form id="newOwnerForm">
+                <p:growl id="growl" autoUpdate="true" showDetail="true" />
+                <div class="formWrapper">
+                    <table>
+                        <tr>
+                            <td>نام کارفرما:</td>
+                            <td colspan="3">
+                                <p:inputText value="#{ownerControl.owner.name}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>توضیحات:</td>
+                            <td colspan="5">
+                                <p:inputTextarea value="#{ownerControl.owner.description}" rows="5" cols="55" counter="display" maxlength="500" counterTemplate="{0}" autoResize="false" />
+                                <h:outputText class="counter" id="display" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="dialogActions">
+                    <p:commandButton class="btn btnDefault" value="ویرایش" action="#{ownerControl.update()}" id="submitOwner" update="growl" />
+                    <p:commandButton class="btn btnDefault" actionListener="#{ownerControl.closeDialog('editOwner')}" value="بازگشت" />
+                </div>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

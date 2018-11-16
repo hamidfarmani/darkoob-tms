@@ -1,0 +1,1108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+
+        <title>نرم افزار مدیریت تست دارکوب</title>
+        <link rel="stylesheet" type="text/css" href="assets/css/main2.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+        <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    </h:head>
+    <h:body>
+
+        <h:form>
+            <p:growl id="mainGrowl" autoUpdate="true" />
+        </h:form>
+
+        <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"></p:ajaxStatus>
+        <p:dialog id="statusDialog" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <img src="assets/img/ajax-loader.gif" />
+        </p:dialog>
+
+        <h:form>
+
+            <div id="header">
+                <div class="logo">
+                    <img src="assets/img/logo.png" />
+                </div>
+                <div class="dropDown">
+                    <button class="dropBtn"><i class="fa fa-plus-square fa-2x" aria-hidden="true"></i></button>
+                    <div class="dropDownContent">
+
+                        <p:commandLink value="مورد تست جدید" actionListener="#{testcaseControl.viewNewTestcaseDialog()}" update=":#{p:component('mainGrowl')}">
+                            <p:ajax event="dialogReturn" update=":#{p:component('testcasemanagementdatatable')}" />
+                        </p:commandLink>
+                        <a href="#">خطای جدید</a>
+                        <a href="#">تکرار جدید</a>
+
+                    </div>
+                </div>
+                <div>
+                    <div style="height: 40px;">
+                        <h:outputText class="projectComboTitle titleFont" value="نام پروژه: " />
+
+                        <ul class="nav navbar-nav" style="text-align: right">
+                            <li dir="rtl">
+                                <p:selectOneMenu id="projectComboList" value="#{projectControl.selectedProject}" style="direction: rtl;">
+                                    <p:ajax listener="#{projectControl.onSelectedProjectChange}" update=" :#{p:component('requirementmanagementdatatable')} :#{p:component('testcasemanagementdatatable')} 
+                                            :#{p:component('integdatatable')}
+                                            :#{p:component('versionmanagementdatatable')}  :#{p:component('iterationmanagementdatatable')}
+                                            :#{p:component('bugmanagementdatatable')} 
+                                            :#{p:component('bugtree')} :#{p:component('tctree')} :#{p:component('reqtree')}
+                                            :#{p:component('executeiteration')} :#{p:component('executetestcasetree')} :#{p:component('executeTestcaseTable')}
+                                            :#{p:component('projecttree')} :#{p:component('iterationComboList')}
+                                            " />
+                                    <f:selectItems value="#{projectControl.allProjectList}" />
+                                </p:selectOneMenu>
+                            </li>
+                        </ul>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </h:form>
+        <div class="contentContainer">
+            <div class="contentSidebar">
+                <div class="theiaStickySidebar">
+                    <div class="userPanel">
+                        <div class="userImage">
+                            <a href="" class="userLink">
+                                <img src="assets/img/user.gif" />
+                                <span>16</span>
+                            </a>
+                        </div>
+                        <div class="userOptions">
+                            <h:form>
+                                <p:commandButton title="مدیریت حساب کاربری" value="" class="fa fa-male" actionListener="#{userControl.viewEditUserDialog(loginControl.enteredUser)}">
+                                    <p:ajax event="dialogReturn" update=":#{p:component('userInfo')}" />
+                                </p:commandButton>
+                                <p:commandButton class="fa fa-key" value="" title="تغییر رمز عبور" actionListener="#{userControl.viewChangePassDialog(loginControl.enteredUser)}" />
+                            </h:form>
+                        </div>
+                    </div>
+
+                    <div class="navMenu">
+                        <ul id="menu">
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'dashboard')" id="defaultOpen">
+                                    <i class="fa fa-tachometer itemIcon"></i>
+                                    <span class="itemTitle">داشبورد</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'usermanagement')">
+                                    <i class="fa fa-users itemIcon"></i>
+                                    <span class="itemTitle">مدیریت کاربران</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'ownermanagement')">
+                                    <i class="fa fa-male itemIcon"></i>
+                                    <span class="itemTitle">مدیریت کارفرمایان</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem haveSubmenu">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'projectmanagement')">
+                                    <i class="fa fa-briefcase itemIcon"></i>
+                                    <span class="itemTitle">مدیریت پروژه ها</span>
+                                </a>
+                                <ul class="subMenu">
+                                    <li class="subItem">
+                                        <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'projecttreemanagement')">مدیریت درخت پروژه ها</a>
+                                    </li>
+                                    <li class="subItem">
+                                        <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'integratedpartmanagement')">مدیریت یکپارچگی درخت پروژه ها</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'requirementmanagement')">
+                                    <i class="fa fa-eercast itemIcon"></i>
+                                    <span class="itemTitle">مدیریت نیازمندی ها</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'testcasemanagement')">
+                                    <i class="fa fa-file-text itemIcon"></i>
+                                    <span class="itemTitle">مدیریت مورد تست ها</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'versionmanagement')">
+                                    <i class="fa fa-code-fork itemIcon"></i>
+                                    <span class="itemTitle">مدیریت نسخه های نرم افزار</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'iterationmanagement')">
+                                    <i class="fa fa-repeat itemIcon"></i>
+                                    <span class="itemTitle">مدیریت تکرار تست ها</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'executemanagement')">
+                                    <i class="fa fa-file-text-o itemIcon"></i>
+                                    <span class="itemTitle">اجرای تست ها</span>
+                                </a>
+                            </li>
+
+                            <li class="menuItem haveSubmenu">
+                                <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'bugmanagement')">
+                                    <i class="fa fa-exclamation-triangle itemIcon"></i>
+                                    <span class="itemTitle">مدیریت خطاها</span>
+                                </a>
+                                <ul class="subMenu">
+                                    <li class="subItem">
+                                        <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'bugtypemanagement')">مدیریت نوع خطاها</a>
+                                    </li>
+                                    <li class="subItem">
+                                        <a href="javascript:void(0)" class="tabLink" onclick="openCity(event, 'bugstatemanagement')">مدیریت وضعیت خطاها</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="menuItem">
+                                <i class="fa fa-sign-out itemIcon"></i>
+                                <h:form>
+                                    <p:commandLink action="#{loginControl.logout()}" value="خروج از سامانه" />
+                                </h:form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="contentWrapper">
+                <div class="theiaStickySidebar">
+                    <div class="contentInnerContainer">
+                        <div id="dashboard" class="tabcontent">
+                            <div id="row1">
+                                <div class="horizontally">
+                                    <div class="iteration seprate">
+                                        <h:form>
+
+                                            <p class="iterationName">نام تکرار </p>
+
+                                            <p:selectOneMenu id="iterationComboList" class="iterationCombo" value="#{dashboardControl.selectedIterationID}">
+                                                <f:selectItems value="#{dashboardControl.allIterationList}" />
+                                            </p:selectOneMenu>
+
+                                            <p:commandButton value="به روز رسانی" actionListener="#{dashboardControl.refreshDashboard()}" class="iterationButton" />
+
+                                        </h:form>
+
+                                    </div>
+                                    <div class="chartsName seprate">
+                                        <ul>
+                                            <li><a href="javascript:void(0)" class="tablinkCharts" onclick="openChart(event, 'chartContainer1')" id="defaultOpenCharts">تست1</a><i class="fa fa-arrow-left" aria-hidden="true"></i></li>
+                                            <li><a href="javascript:void(0)" class="tablinkCharts" onclick="openChart(event, 'chart2')">تست2</a><i class="fa fa-arrow-left" aria-hidden="true"></i></li>
+                                            <li><a href="javascript:void(0)" class="tablinkCharts" onclick="openChart(event, 'chart3')">تست3</a><i class="fa fa-arrow-left" aria-hidden="true"></i></li>
+
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="chartss horizontally seprate">
+                                    <div id="chartContainer1" class="tabcontentCharts">تست 1</div>
+                                    <div id="chart2" class="tabcontentCharts">تست2</div>
+                                    <div id="chart3" class="tabcontentCharts">تست3</div>
+                                </div>
+                                <div class="person horizontally">
+                                    <div class="person1 seprate">
+                                        <p class="nameOFProject">دارکوب</p>
+                                        <div class="c100 p25 dark">
+                                            <span>70%</span>
+                                            <div class="slice">
+                                                <div class="bar"></div>
+                                                <div class="fill"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="person2 seprate">
+                                        <p class="team">کاربر فعال</p>
+                                        <ul>
+                                            <li class="members">
+                                                <p:outputLabel value="#{loginControl.enteredUser.fullname}" id="userInfo" />
+                                                <img src="assets/img/member.png" class="memberIcon" />
+                                            </li>
+                                            <li class="members" id="userBugInfo">تعداد خطای ثبت کرده: #{bugControl.getReportedBug(loginControl.enteredUser.id)}</li>
+                                            <li class="members" id="userTestcaseInfo">تعداد مورد تست های ثبت کرده: #{testcaseControl.getSubmitedTestcase(loginControl.enteredUser.id)}</li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="row2">
+                                <div class="person3 horizontally seprate">
+                                    <p class="problemTitle">گزارش مشکل</p>
+                                    <input type="text" class="problemInput" placeholder="موضوع" />
+
+                                    <div class="problemSelect horizontally">
+                                        <select>
+                                            <option>تست کیس</option>
+                                            <option>باگ</option>
+                                            <option>خطا</option>
+                                        </select>
+                                    </div>
+                                    <div class="btnCreate horizontally"><button>ثبت</button></div>
+
+
+
+                                </div>
+                                <div class="person4 horizontally seprate">
+                                    <div class="projectAssignToPerson horizontally">
+                                        <p>پروژه ها</p>
+                                        <span class="projectNumber">#{projectControl.projectList.size()}</span>
+                                    </div>
+                                    <div class="projectAssignToPerson horizontally">
+                                        <p>تعداد کاربران</p>
+                                        <span class="projectNumber">#{userControl.userList.size()}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="usermanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف کاربران وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form id="usermanagementform">
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{userControl.viewNewUserDialog()}" value="عضو جدید">
+                                                <p:ajax event="dialogReturn" update="usermanagementdatatable" />
+                                            </p:commandButton>
+                                        </div>
+                                        <div class="tableWrapper">
+                                            <p:dataTable class="" id="usermanagementdatatable" value="#{userControl.userList}" var="users" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="">
+                                                <p:column filterBy="#{users.id}" filterFunction="#{userControl.trimFilterValue}" filterMatchMode="contains" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه کاربر</f:facet>
+                                                        #{users.id}
+                                                </p:column>
+                                                <p:column filterBy="#{users.fullname}" filterFunction="#{userControl.trimFilterValue}" filterMatchMode="contains" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">نام کامل</f:facet>
+                                                        #{users.fullname}
+                                                </p:column>
+                                                <p:column filterBy="#{users.username}" filterFunction="#{userControl.trimFilterValue}" filterMatchMode="contains" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">نام کاربری</f:facet>
+                                                        #{users.username}
+                                                </p:column>
+                                                <p:column width="110" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton class="fa fa-pencil" actionListener="#{userControl.viewEditUserDialog(users)}" title="ویرایش">
+                                                        <p:ajax event="dialogReturn" update="usermanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton class="fa fa-key" title="تغییر رمز عبور" actionListener="#{userControl.viewChangePassDialog(users)}" />
+                                                    <p:commandButton title="حذف" action="#{userControl.removeUser(users)}" class="fa fa-trash" update="usermanagementdatatable">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف کاربر اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="ownermanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف کارفرمایان وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form id="ownermanagementform">
+                                        <p:growl id="ownerGrowl" autoUpdate="true" showDetail="true" />
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{ownerControl.viewNewOwnerDialog()}" value="کارفرما جدید">
+                                                <p:ajax event="dialogReturn" update="ownermanagementdatatable" />
+                                            </p:commandButton>
+                                        </div>
+                                        <div class="tableWrapper">
+                                            <p:dataTable class="" id="ownermanagementdatatable" value="#{ownerControl.ownerList}" var="owners" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="">
+                                                <p:column filterBy="#{owners.id}" filterFunction="#{ownerControl.trimFilterValue}" filterMatchMode="contains" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه کارفرما</f:facet>
+                                                        #{owners.id}
+                                                </p:column>
+                                                <p:column filterBy="#{owners.name}" filterFunction="#{ownerControl.trimFilterValue}" filterMatchMode="contains" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">نام کارفرما</f:facet>
+                                                        #{owners.name}
+                                                </p:column>
+                                                <p:column width="60" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton class="fa fa-pencil" title="ویرایش" actionListener="#{ownerControl.viewEditOwnerDialog(owners)}">
+                                                        <p:ajax event="dialogReturn" update="ownermanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton title="حذف" action="#{ownerControl.removeOwner(owners)}" class="fa fa-trash" update="ownermanagementdatatable">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف کارفرما اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="projectmanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف پروژه وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <p:growl id="growl" showDetail="true" />
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{projectControl.viewNewProjectDialog()}" value="پروژه جدید">
+                                                <p:ajax event="dialogReturn" oncomplete="$('[id$=uploadproject]').click();" update="projectmanagementdatatable :#{p:component('projectComboList')}" />
+                                            </p:commandButton>
+                                            <p:commandButton id="uploadproject" 
+                                                             action="#{projectControl.viewAttachmentDialog(projectControl.project)}" 
+                                                             icon="ui-icon ui-icon-trash" 
+                                                             value="upload" 
+                                                             title="انتساب فایل به پروژه"
+                                                             style="display:none">
+                                                <p:confirm header="انتساب فایل به پروژه" 
+                                                           message="آیا می خواهید فایلی را به پروژه منتسب کنید؟" 
+                                                           icon="ui-icon-alert"/>
+                                            </p:commandButton>
+
+                                            <p:confirmDialog id="confirmation" widgetVar="confirmation" global="true" showEffect="fade" hideEffect="explode">
+                                                <p:commandButton value="بله"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="خیر"  styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+                                        </div>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable id="projectmanagementdatatable" value="#{projectControl.projectList}" var="projects" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}">
+                                                <p:column filterBy="#{projects.id}" filterFunction="#{projectControl.trimFilterValue}" filterMatchMode="contains" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه پروژه</f:facet>
+                                                        #{projects.id}
+                                                </p:column>
+
+                                                <p:column filterBy="#{projects.name}" filterFunction="#{projectControl.trimFilterValue}" filterMatchMode="contains" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">نام پروژه</f:facet>
+                                                        #{projects.name}
+                                                </p:column>
+
+                                                <p:column class="colActions" width="120">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton class="fa fa-pencil" title="ویرایش" actionListener="#{projectControl.viewEditProjectDialog(projects)}">
+                                                        <p:ajax event="dialogReturn" update="projectmanagementdatatable :#{p:component('projectComboList')}" />
+                                                    </p:commandButton>
+                                                    <p:commandButton class="fa fa-paperclip" title="انتساب فایل" actionListener="#{projectControl.viewAttachmentDialog(projects)}">
+                                                    </p:commandButton>
+                                                    <p:commandButton title="حذف" action="#{projectControl.removeProject(projects)}" class="fa fa-trash" update="projectmanagementdatatable :#{p:component('projectComboList')}">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف پروژه اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="projecttreemanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف درخت وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form id="treeform">
+                                        <p:growl id="projecttreeGrowl" showDetail="true" life="1500" />
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton value="اضافه کردن نوع درخت" class="tableButton btn" actionListener="#{projecttreetypeControl.viewNewProjecttreetypeDialog()}">
+                                                <p:ajax event="dialogReturn" />
+                                            </p:commandButton>
+                                        </div>
+                                        <p:outputPanel id="treepanel" class="treeWrapper">
+                                            <p:tree dir="rtl" id="projecttree" value="#{projectTreeControl.root}" var="node" selectionMode="single" selection="#{projectTreeControl.selectedNode}" dynamic="false">
+                                                <p:ajax event="select" listener="#{projectTreeControl.onNodeChange(node)}" update=":#{p:component('tctable')}" />
+                                                <p:ajax event="unselect" listener="#{projectTreeControl.onUnselect()}" update=":#{p:component('tctable')}" />
+                                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                    <h:outputText value="#{node.getName()}" />
+                                                </p:treeNode>
+                                            </p:tree>
+
+
+                                            <p:contextMenu for="treepanel">
+                                                <p:menuitem value="گره جدید" action="#{projectTreeControl.viewNewNodeDialog()}" update="projecttreeGrowl projecttree" icon="ui-icon-plus" />
+                                                <p:menuitem value="ویرایش" actionListener="#{projectTreeControl.viewEditDialog()}" icon="ui-icon-minus" update=":#{p:component('projecttree')}" />
+                                                <p:menuitem value="حذف" actionListener="#{projectTreeControl.removeProjectTreeNode()}" update="projecttreeGrowl projecttree" icon="ui-icon-close" />
+                                            </p:contextMenu>
+                                        </p:outputPanel>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable id="tctable" value="#{projectTreeControl.testcases}" var="tc" emptyMessage="مورد کاربردی وجود ندارد.">
+                                                <p:column filterBy="#{tc.id}" filterFunction="#{projectTreeControl.trimFilterValue}" filterMatchMode="contains" width="130" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه مورد تست</f:facet>
+                                                        #{tc.id}
+                                                </p:column>
+
+                                                <p:column filterBy="#{tc.title}" filterFunction="#{projectTreeControl.trimFilterValue}" filterMatchMode="contains" width="500" filterStyle="width: 450px;">
+                                                    <f:facet name="header">عنوان مورد تست</f:facet>
+                                                        #{tc.title}
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="integratedpartmanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف یکپارچکی درخت وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <p:growl id="growl" showDetail="true" />
+
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" value="اضافه کردن رابطه بین گره های درخت" actionListener="#{projectTreeControl.viewNewIntegratedPartsDialog()}" >
+                                                <p:ajax event="dialogReturn" update="integdatatable"/>
+                                            </p:commandButton>
+                                        </div>
+
+                                        <div class="treeWrapper">
+                                            <p:tree id="integratedprojecttree" value="#{projectTreeControl.root}" var="node" selectionMode="single" selection="#{projectTreeControl.selectedNode}" dir="rtl">
+                                                <p:ajax event="select" listener="#{projectTreeControl.onNodeChange(node)}" update=":#{p:component('integdatatable')}" />
+                                                <p:ajax event="unselect" listener="#{projectTreeControl.onUnselect()}" update=":#{p:component('integdatatable')}" />
+                                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                    <h:outputText value="#{node.getName()}" />
+                                                </p:treeNode>
+                                            </p:tree>
+                                        </div>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable id="integdatatable" value="#{projectTreeControl.integratedParts}" var="integpart" emptyMessage="مورد کاربردی وجود ندارد.">
+                                                <p:column filterBy="#{integpart.id}" filterFunction="#{projectTreeControl.trimFilterValue}" filterMatchMode="contains" width="130" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه یکپارچگی</f:facet>
+                                                        #{integpart.id}
+                                                </p:column>
+                                                <p:column filterBy="#{integpart.tprojecttreeByProjecttreeid1.name}" filterFunction="#{projectTreeControl.trimFilterValue}" filterMatchMode="contains" width="400" filterStyle="width: 350px;">
+                                                    <f:facet name="header">عنوان گره مبدا</f:facet>
+                                                        #{integpart.tprojecttreeByProjecttreeid1.name}
+                                                </p:column>
+                                                <p:column filterBy="#{integpart.tprojecttreeByProjecttreeid2.name}" filterFunction="#{projectTreeControl.trimFilterValue}" filterMatchMode="contains" width="400" filterStyle="width: 350px;">
+                                                    <f:facet name="header">عنوان گره مقصد</f:facet>
+                                                        #{integpart.tprojecttreeByProjecttreeid2.name}
+                                                </p:column>
+                                                <p:column width="80" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton title="مورد تست جدید" actionListener="#{testcaseControl.viewNewTestcaseDialog()}" class="fa fa-plus" update=":#{p:component('mainGrowl')}">
+                                                        <p:ajax event="dialogReturn" update="integdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton title="حذف" action="#{projectTreeControl.removeIntegratedPart(integpart)}" class="fa fa-trash" update="integdatatable">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف ارتباط اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="requirementmanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف نیازمندی وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{requirementControl.viewNewRequirementDialog()}" value="نیازمندی جدید">
+                                                <p:ajax event="dialogReturn" oncomplete="$('[id$=uploadrequirement]').click();" update="requirementmanagementdatatable" />
+                                            </p:commandButton>
+                                            <p:commandButton id="uploadrequirement" 
+                                                             action="#{requirementControl.viewAttachmentDialog(requirementControl.requirement)}" 
+                                                             icon="ui-icon ui-icon-trash" 
+                                                             value="upload" 
+                                                             title="انتساب فایل به نیازمندی"
+                                                             style="display:none">
+                                                <p:confirm header="انتساب فایل به نیازمندی" 
+                                                           message="آیا می خواهید فایلی را به نیازمندی منتسب کنید؟" 
+                                                           icon="ui-icon-alert"/>
+                                            </p:commandButton>
+
+                                            <p:confirmDialog id="confirmation" widgetVar="confirmation" global="true" showEffect="fade" hideEffect="explode">
+                                                <p:commandButton value="بله"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="خیر"  styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+
+                                        </div>
+
+                                        <p:outputPanel style="height: 200px;overflow: auto;">
+                                            <p:tree style="float: right;" id="reqtree" dir="rtl" value="#{requirementControl.root}" var="node" selectionMode="single" selection="#{requirementControl.selectedNode}" dynamic="false">
+                                                <p:ajax event="select" listener="#{requirementControl.onNodeChange(node)}" update=":#{p:component('requirementmanagementdatatable')}" />
+                                                <p:ajax event="unselect" listener="#{requirementControl.onUnselect()}" update=":#{p:component('requirementmanagementdatatable')}" />
+                                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                    <h:outputText value="#{node.getName()}" />
+                                                </p:treeNode>
+                                            </p:tree>
+                                        </p:outputPanel>
+
+                                        <div class="tableWrapper">
+                                            <p:growl id="growl" showDetail="true" />
+                                            <p:dataTable id="requirementmanagementdatatable" class="" value="#{requirementControl.requirementList}" var="requirements" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="">
+                                                <p:column filterBy="#{requirements.id}" filterFunction="#{requirementControl.trimFilterValue}" filterMatchMode="contains" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه نیازمندی</f:facet>
+                                                        #{requirements.id}
+                                                </p:column>
+                                                <p:column filterBy="#{requirements.symbol}" filterFunction="#{requirementControl.trimFilterValue}" filterMatchMode="contains" width="200" filterStyle="width: 150px;">
+                                                    <f:facet name="header">نشانه نیازمندی</f:facet>
+                                                        #{requirements.symbol}
+                                                </p:column>
+
+                                                <p:column filterBy="#{requirements.description}" filterFunction="#{requirementControl.trimFilterValue}" filterMatchMode="contains" width="400" filterStyle="width: 350px;">
+                                                    <f:facet name="header">توصیف نیازمندی</f:facet>
+                                                    <h:outputText value="#{requirements.description.length() > 120 ? requirements.description.subSequence(0, 120) : requirements.description}" />
+
+                                                </p:column>
+
+                                                <p:column width="150" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton actionListener="#{requirementControl.viewEditRequirementDialog(requirements)}" class="fa fa-pencil" title="ویرایش">
+                                                        <p:ajax event="dialogReturn" update="requirementmanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton class="fa fa-paperclip" title="انتساب فایل" actionListener="#{requirementControl.viewAttachmentDialog(requirements)}" />
+                                                    <p:commandButton title="نمایش" class="fa fa-eye" actionListener="#{requirementControl.viewRequirementDialog(requirements)}" />
+                                                    <p:commandButton title="انتساب به درخت پروژه" class="fa fa-tags" actionListener="#{requirementControl.viewAssignToTreeDialog(requirements)}" />
+                                                    <p:commandButton title="حذف" action="#{requirementControl.removeRequirement(requirements)}" class="fa fa-trash" update="requirementmanagementdatatable :#{p:component('growl')}">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف نیازمندی اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="testcasemanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف مورد تست وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{testcaseControl.viewNewTestcaseDialog()}" value="مورد تست جدید">
+                                                <p:ajax event="dialogReturn" oncomplete="$('[id$=uploadtestcase]').click();" update="testcasemanagementdatatable " />
+                                            </p:commandButton>
+                                            <p:commandButton id="uploadtestcase" 
+                                                             action="#{testcaseControl.viewAttachmentDialog(testcaseControl.testcase)}" 
+                                                             icon="ui-icon ui-icon-trash" 
+                                                             value="upload" 
+                                                             title="انتساب فایل به مورد تست"
+                                                             style="display:none">
+                                                <p:confirm header="انتساب فایل به مورد تست" 
+                                                           message="آیا می خواهید فایلی را به مورد تست منتسب کنید؟" 
+                                                           icon="ui-icon-alert"/>
+                                            </p:commandButton>
+
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                                <p:commandButton value="بله"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="خیر"  styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+
+                                        </div>
+
+                                        <p:outputPanel style="height: 200px;overflow: auto;">
+                                            <p:tree style="float: right;" id="tctree" dir="rtl" value="#{testcaseControl.root}" var="node" selectionMode="single" selection="#{testcaseControl.selectedNode}" dynamic="false">
+                                                <p:ajax event="select" listener="#{testcaseControl.onNodeChange(node)}" update=":#{p:component('testcasemanagementdatatable')}" />
+                                                <p:ajax event="unselect" listener="#{testcaseControl.onUnselect()}" update=":#{p:component('testcasemanagementdatatable')}" />
+                                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                    <h:outputText value="#{node.getName()}" />
+                                                </p:treeNode>
+                                            </p:tree>
+                                        </p:outputPanel>
+
+                                        <div class="tableWrapper">
+                                            <p:growl id="growl" showDetail="true" />
+                                            <p:dataTable id="testcasemanagementdatatable" widgetVar="dttestcase" class="" value="#{testcaseControl.testcaseList}" var="testcases" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="" rowKey="#{testcases.id}">
+                                                <p:column filterBy="#{testcases.id}" filterFunction="#{testcaseControl.trimFilterValue}" filterMatchMode="contains" width="130" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه مورد تست</f:facet>
+                                                        #{testcases.id}
+                                                </p:column>
+                                                <p:column filterBy="#{testcases.title}" filterFunction="#{testcaseControl.trimFilterValue}" filterMatchMode="contains" width="400" filterStyle="width: 350px;">
+                                                    <f:facet name="header">عنوان مورد تست</f:facet>
+                                                        #{testcases.title}
+                                                </p:column>
+
+                                                <p:column filterBy="#{testcases.testcasetype}" filterMatchMode="in" width="100" filterStyle="width: 80px;">
+                                                    <f:facet name="filter">
+                                                        <p:selectCheckboxMenu id="tctype" label="نوع مورد تست" onchange="PF('dttestcase').filter()">
+                                                            <f:selectItem itemValue="S" itemLabel="ساده" />
+                                                            <f:selectItem itemValue="I" itemLabel="یکپارچگی" />
+                                                        </p:selectCheckboxMenu>
+                                                    </f:facet>
+
+                                                    <h:outputText rendered="#{testcases.testcasetype eq 'S'}" value="ساده" />
+                                                    <h:outputText rendered="#{testcases.testcasetype eq 'I'}" value="یکپارچگی" />
+
+
+                                                </p:column>
+
+                                                <p:column width="100" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton actionListener="#{testcaseControl.viewEditTestcaseDialog(testcases)}" class="fa fa-pencil" title="ویرایش">
+                                                        <p:ajax event="dialogReturn" update="testcasemanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton title="نمایش" class="fa fa-eye" actionListener="#{testcaseControl.viewTestcaseDialog(testcases)}" />
+                                                    <p:commandButton class="fa fa-tags" title="انتساب به درخت پروژه" actionListener="#{testcaseControl.viewAssignToTreeDialog(testcases)}" />
+                                                    <p:commandButton title="حذف" action="#{testcaseControl.removeTestcase(testcases)}" class="fa fa-trash" update="testcasemanagementdatatable">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف مورد تست اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="versionmanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف نسخه های نرم افزار وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <p:growl id="versionGrowl" showDetail="true" life="1000" />
+
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{versionControl.viewNewVersionDialog()}" value="نسخه جدید">
+                                                <p:ajax event="dialogReturn" update="versionmanagementdatatable" />
+                                            </p:commandButton>
+                                        </div>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable id="versionmanagementdatatable" class="" value="#{versionControl.versionList}" var="versions" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="">
+                                                <p:column filterBy="#{versions.id}" filterFunction="#{versionControl.trimFilterValue}" filterMatchMode="contains" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه نسخه</f:facet>
+                                                        #{versions.id}
+                                                </p:column>
+                                                <p:column filterBy="#{versions.name}" filterFunction="#{versionControl.trimFilterValue}" filterMatchMode="contains" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">نام نسخه</f:facet>
+                                                        #{versions.name}
+                                                </p:column>
+
+                                                <p:column width="80" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton actionListener="#{versionControl.viewEditVersionDialog(versions)}" class="fa fa-pencil" title="ویرایش">
+                                                        <p:ajax event="dialogReturn" update="versionmanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton title="حذف" action="#{versionControl.removeVersion(versions)}" class="fa fa-trash" update="versionmanagementdatatable :#{p:component('versionGrowl')}">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف نسخه نرم افزار اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="iterationmanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف تکرار تست وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{iterationControl.viewNewIterationDialog()}" value="تکرار تست جدید">
+                                                <p:ajax event="dialogReturn" update="iterationmanagementdatatable" />
+                                            </p:commandButton>
+                                        </div>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable id="iterationmanagementdatatable" class="" value="#{iterationControl.iterationList}" var="iterations" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="">
+                                                <p:column filterBy="#{iterations.id}" filterFunction="#{iterationControl.trimFilterValue}" filterMatchMode="contains" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه تکرار</f:facet>
+                                                        #{iterations.id}
+                                                </p:column>
+                                                <p:column filterBy="#{iterations.name}" filterMatchMode="contains" filterFunction="#{iterationControl.trimFilterValue}" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">نام تکرار</f:facet>
+                                                        #{iterations.name}
+                                                </p:column>
+
+                                                <p:column width="100" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+
+                                                    <p:commandButton actionListener="#{iterationControl.viewEditIterationDialog(iterations)}" class="fa fa-pencil" title="ویرایش">
+                                                        <p:ajax event="dialogReturn" update="iterationmanagementdatatable" />
+                                                    </p:commandButton>
+
+                                                    <p:commandButton title="نمایش لیست مورد تست ها" class="fa fa-eye" actionListener="#{iterationControl.viewTestcaseOfIterationDialog(iterations)}" />
+                                                    <p:commandButton title="حذف" action="#{iterationControl.removeIteration(iterations)}" class="fa fa-trash" update="iterationmanagementdatatable :#{p:component('executeiteration')}">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف تکرار تست اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="executemanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف اجرای تکرار وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="tableWrapper">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <h:outputText value="نام تکرار تست: " />
+                                                    </td>
+                                                    <td>
+                                                        <p:selectOneMenu id="executeiteration" value="#{executeTestcaseControl.iterationID}">
+                                                            <p:ajax listener="#{executeTestcaseControl.onIterationChange()}" update="executeTestcaseTable" />
+                                                            <f:selectItems value="#{executeTestcaseControl.iterationItems}" />
+                                                        </p:selectOneMenu>
+                                                    </td>
+
+                                                    <td>
+                                                        <p:outputPanel style="height: 200px;overflow: auto;display: block">
+                                                            <p:tree style="float: right;" id="executetestcasetree" dir="rtl" value="#{executeTestcaseControl.root}" var="node" selectionMode="single" selection="#{executeTestcaseControl.selectedNode}" dynamic="false">
+                                                                <p:ajax event="select" listener="#{executeTestcaseControl.onNodeChange(node)}" update=":#{p:component('executeTestcaseTable')}" />
+                                                                <p:ajax event="unselect" listener="#{executeTestcaseControl.onUnselect()}" update=":#{p:component('executeTestcaseTable')}" />
+                                                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                                    <h:outputText value="#{node.getName()}" />
+                                                                </p:treeNode>
+                                                            </p:tree>
+                                                        </p:outputPanel>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable id="executeTestcaseTable" class="" value="#{executeTestcaseControl.executeTestcaseList}" var="executionTestcases" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" tableStyle="">
+                                                <p:column filterBy="#{executionTestcases.id}" filterFunction="#{executeTestcaseControl.trimFilterValue}" filterMatchMode="contains" width="130" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه مورد تست</f:facet>
+                                                        #{executionTestcases.id}
+                                                </p:column>
+
+                                                <p:column filterBy="#{executionTestcases.title}" filterFunction="#{executeTestcaseControl.trimFilterValue}" filterMatchMode="contains" width="500" filterStyle="width: 450px;">
+                                                    <f:facet name="header">عنوان مورد تست</f:facet>
+                                                        #{executionTestcases.title}
+                                                </p:column>
+
+                                                <p:column width="100" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+                                                    <p:commandButton title="نمایش" class="fa fa-eye" actionListener="#{testcaseControl.viewTestcaseDialog(executionTestcases)}" />
+                                                    <p:commandButton title="ثبت خطا" class="fa fa-bug" actionListener="#{bugControl.viewNewBugDialog(executeTestcaseControl.projectID,executeTestcaseControl.iterationID,executionTestcases)}" />
+                                                    <p:commandButton title="تکمیل اجرا" action="#{executeTestcaseControl.execute(executionTestcases)}" icon="fa fa-check" update=":#{p:component('executeTestcaseTable')}">
+                                                        <p:confirm header="تکمیل اجرا" message="آیا از تکمیل مورد تست اطمینان دارید؟" class="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" update=":#{p:component('executeTestcaseTable')}" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="bugmanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف خطا وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{bugControl.viewNewBugDialog()}" value="خطا جدید">
+                                                <p:ajax event="dialogReturn" oncomplete="$('[id$=uploadbug]').click();" update="bugmanagementdatatable" />
+                                            </p:commandButton>
+                                            <p:commandButton id="uploadbug" 
+                                                             action="#{bugControl.viewAttachmentDialog(bugControl.bug)}" 
+                                                             icon="ui-icon ui-icon-trash" 
+                                                             value="upload" 
+                                                             title="انتساب فایل به مورد خط"
+                                                             style="display:none">
+                                                <p:confirm header="انتساب فایل به خطا" 
+                                                           message="آیا می خواهید فایلی را به خطا منتسب کنید؟" 
+                                                           icon="ui-icon-alert"/>
+                                            </p:commandButton>
+
+                                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                                <p:commandButton value="بله"  styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                <p:commandButton value="خیر"  styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                            </p:confirmDialog>
+                                        </div>
+
+                                        <p:growl id="growl" showDetail="true" />
+
+                                        <div class="treeWrapper">
+                                            <p:tree style="float: right;" id="bugtree" dir="rtl" value="#{bugControl.root}" var="node" selectionMode="single" selection="#{bugControl.selectedNode}" dynamic="false">
+                                                <p:ajax event="select" listener="#{bugControl.onNodeChange(node)}" update=":#{p:component('bugmanagementdatatable')}" />
+                                                <p:ajax event="unselect" listener="#{bugControl.onUnselect()}" update=":#{p:component('bugmanagementdatatable')}" />
+                                                <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                    <h:outputText value="#{node.getName()}" />
+                                                </p:treeNode>
+                                            </p:tree>
+                                        </div>
+
+                                        <div class="tableWrapper">
+                                            <p:dataTable class="" id="bugmanagementdatatable" widgetVar="bugtable" value="#{bugControl.bugList}" var="bugs" emptyMessage="موردی با این مشخصات یافت نشد." paginator="true" paginatorTemplate="{FirstPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown} {CurrentPageReport}" rowsPerPageTemplate="10,30,50,100" rows="10" currentPageReportTemplate="صفحه {currentPage} از {totalPages}" rowKey="#{bugs.id}" tableStyle="">
+                                                <p:column filterBy="#{bugs.id}" filterMatchMode="contains" filterFunction="#{bugControl.trimFilterValue}" width="120" filterStyle="width: 90px;">
+                                                    <f:facet name="header">شناسه خطا</f:facet>
+                                                        #{bugs.id}
+                                                </p:column>
+
+                                                <p:column filterBy="#{bugs.title}" filterMatchMode="contains" filterFunction="#{bugControl.trimFilterValue}" width="300" filterStyle="width: 250px;">
+                                                    <f:facet name="header">عنوان خطا</f:facet>
+                                                        #{bugs.title}
+                                                </p:column>
+
+                                                <p:column filterBy="#{bugs.tbugtype.name}" filterMatchMode="in" width="100" filterStyle="width: 80px;">
+                                                    <f:facet name="filter">
+                                                        <p:selectCheckboxMenu id="bugtype" label="نوع خطا" onchange="PF('bugtable').filter()">
+                                                            <f:selectItems value="#{bugControl.bugTypeForFilter}" />
+                                                        </p:selectCheckboxMenu>
+                                                    </f:facet>
+
+                                                    <h:outputText value="#{bugs.tbugtype.name}" />
+
+
+                                                </p:column>
+
+                                                <p:column filterBy="#{bugs.tbugstate.name}" filterMatchMode="in" width="150" filterStyle="width: 100px;">
+                                                    <f:facet name="filter">
+                                                        <p:selectCheckboxMenu id="bugstate" label="وضعیت خطا" onchange="PF('bugtable').filter()">
+                                                            <f:selectItems value="#{bugControl.bugStateForFilter}" />
+                                                        </p:selectCheckboxMenu>
+                                                    </f:facet>
+                                                    <h:outputText value="#{bugs.tbugstate.name}" />
+                                                </p:column>
+
+                                                <p:column filterBy="#{bugs.tuser.fullname}" filterMatchMode="in" width="150" filterStyle="width: 120px;">
+                                                    <f:facet name="filter">
+                                                        <p:selectCheckboxMenu id="bugsubmitter" label="ثبت کننده خطا" onchange="PF('bugtable').filter()">
+                                                            <f:selectItems value="#{userControl.usersItem}" />
+                                                        </p:selectCheckboxMenu>
+
+                                                    </f:facet>
+                                                    #{bugs.tuser.fullname}
+                                                </p:column>
+
+                                                <p:column width="150" class="colActions">
+                                                    <f:facet name="header">عملیات</f:facet>
+
+                                                    <p:commandButton class="fa fa-pencil" actionListener="#{bugControl.viewEditBugDialog(bugs)}" title="ویرایش">
+                                                        <p:ajax event="dialogReturn" update="bugmanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton class="fa fa-retweet" title="تغییر وضعیت" action="#{bugControl.viewChangeBugStateDialog(bugs)}">
+                                                        <p:ajax event="dialogReturn" update="bugmanagementdatatable" />
+                                                    </p:commandButton>
+                                                    <p:commandButton class="fa fa-eye" title="نمایش" actionListener="#{bugControl.viewBugDialog(bugs)}">
+                                                        <f:setPropertyActionListener value="#{bugs}" target="#{bugControl.bug}" />
+                                                    </p:commandButton>
+                                                    <p:commandButton title="حذف" action="#{bugControl.removeBug(bugs)}" class="fa fa-trash" update="bugmanagementdatatable">
+                                                        <p:confirm header="تایید حذف" message="آیا از حذف خطا اطمینان دارید؟" icon="ui-icon-alert" />
+                                                    </p:commandButton>
+
+                                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                        <p:commandButton value="بله" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                                        <p:commandButton value="خیر" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                    </p:confirmDialog>
+
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="bugtypemanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف خطا وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{bugTypeControl.viewNewBugTypeDialog()}" value="نوع خطای جدید" />
+                                        </div>
+
+                                        <p:growl id="growl" showDetail="true" />
+
+                                        <!--table-->
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="bugstatemanagement" class="tabWrapper tabcontent">
+                            <div class="wrapperTop">
+                                <i class="fa fa-close tabCloseIcon" onclick="openCity(event, 'dashboard')"></i>
+                                <p:outputLabel class="tabDescription" value="در این بخش امکان تعریف خطا وجود دارد." />
+                            </div>
+                            <div class="wrapperContent">
+                                <div class="wrapperContainer">
+                                    <h:form>
+                                        <div class="wrapperTopButtons">
+                                            <p:commandButton class="tableButton btn" actionListener="#{bugStateControl.viewNewBugStateDialog()}" value="وضعیت خطای جدید" />
+                                        </div>
+
+                                        <p:growl id="growl" showDetail="true" />
+
+                                        <!--table-->
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footerContainer">
+            <p>
+                کلیه حقوق این سایت متعلق به شرکت اویهنگ می باشد
+                <br></br>
+                © Copyrights - Avihang Co. - 2016
+            </p>
+        </div>
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="assets/lib/theia-sticky-sidebar/ResizeSensor.min.js"></script>
+        <script src="assets/lib/theia-sticky-sidebar/theia-sticky-sidebar.min.js"></script>
+        <script>
+                                            var $j = jQuery.noConflict();
+                                            $j(document).ready(function() {
+                                    $j('.contentSidebar, .contentWrapper').theiaStickySidebar({
+                                    // Settings
+                                    //additionalMarginTop: 30
+                                    });
+                                    });
+                                            function openCity(evt, cityName) {
+                                            var i, tabcontent, tablinks;
+                                                    tabcontent = document.getElementsByClassName("tabcontent");
+                                                    for (i = 0; i &lt; tabcontent.length; i++) {
+                                            tabcontent[i].style.display = "none";
+                                            }
+                                            tablinks = document.getElementsByClassName("tabLink");
+                                                    for (i = 0; i &lt; tablinks.length; i++) {
+                                            tablinks[i].className = tablinks[i].className.replace(" active", "");
+                                            }
+                                            document.getElementById(cityName).style.display = "block";
+                                                    evt.currentTarget.className += " active";
+                                            }
+                                    // Get the element with id="defaultOpen" and click on it
+                                    document.getElementById("defaultOpen").click();</script>
+        <script>
+                    function openChart(evt, cityName) {
+                    var i, tabcontent, tablinks;
+                            tabcontent = document.getElementsByClassName("tabcontentCharts");
+                            for (i = 0; i &lt; tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                    }
+                    tablinks = document.getElementsByClassName("tabLinkCharts");
+                            for (i = 0; i &lt; tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                    }
+                    document.getElementById(cityName).style.display = "block";
+                            evt.currentTarget.className += " active";
+                    }
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpenCharts").click();
+
+        </script>
+
+
+
+    </h:body>
+
+</html>

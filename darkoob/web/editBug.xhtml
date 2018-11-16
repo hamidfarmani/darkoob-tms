@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ویرایش خطا</title>
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form>
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"></p:ajaxStatus>
+                <p:dialog id="statusDialog" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <p:graphicImage name="/images/ajax-loader.gif" />
+                </p:dialog>
+
+                <p:growl id="growl" showDetail="true" />
+
+                <p:tabView>
+                    <p:tab title="مشخصات عمومی">
+                        <div class="formWrapper">
+                            <table class="fullWidth">
+                                <tr>
+                                    <td>ثبت کننده خطا:</td>
+                                    <td colspan="3">
+                                        <h:outputText value="#{bugControl.bug.tuser.fullname}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نوع خطا:</td>
+                                    <td colspan="3">
+                                        <p:selectOneRadio id="testType" value="#{bugControl.typeID}">
+                                            <f:selectItems value="#{bugControl.bugtypeComboItem}" />
+                                        </p:selectOneRadio>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>عنوان خطا:</td>
+                                    <td colspan="3">
+                                        <h:inputText value="#{bugControl.bug.title}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>توضیحات خطا:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea value="#{bugControl.bug.description}" rows="5" counter="bugDesCounter" maxlength="4000" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText class="counter" id="bugDesCounter" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نتیجه مشاهده شده:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea value="#{bugControl.bug.result}" rows="5" counter="bugResCounter" maxlength="1000" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText class="counter" id="bugResCounter" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </p:tab>
+                    <p:tab title="انتساب">
+                        <div class="formWrapper">
+                            <table class="fullWidth">
+                                <tr>
+                                    <td>نام پروژه:</td>
+                                    <td colspan="3">
+                                        <p:selectOneMenu value="#{bugControl.projectID}">
+                                            <p:ajax listener="#{bugControl.onProjectChange}" update="iteration projecttree :#{p:component('growl')}" />
+                                            <f:selectItems value="#{bugControl.projectComboItem}" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نام تکرار تست:</td>
+                                    <td colspan="3">
+                                        <p:selectOneMenu id="iteration" value="#{bugControl.iterationID}">
+                                            <p:ajax listener="#{bugControl.onIterationChange()}" update="scenario :#{p:component('growl')}" />
+                                            <f:selectItems value="#{bugControl.iterationComboItem}" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>عنوان مورد تست:</td>
+                                    <td colspan="3">
+                                        <p:selectOneMenu id="scenario" value="#{bugControl.selectedTestcaseID}" effect="fade" filter="true" filterMatchMode="startsWith">
+                                            <f:selectItems value="#{bugControl.testcaseItem}" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        <p:tree dir="rtl" id="projecttree" value="#{bugControl.root}" var="node" selectionMode="single" selection="#{bugControl.selectedNode}">
+                                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                <h:outputText value="#{node.getName()}" />
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="dialogActions">
+                            <p:commandButton class="btn btnDefault" value="ویرایش" action="#{bugControl.updateBug()}" update=":#{p:component('growl')}" />
+                            <p:commandButton class="btn btnDefault" actionListener="#{bugControl.closeDialog('editBug')}" value="بازگشت" />
+                        </div>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

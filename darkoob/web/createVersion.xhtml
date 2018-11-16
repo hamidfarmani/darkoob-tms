@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>اضافه کردن نسخه جدید</title>
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form>
+                <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();"></p:ajaxStatus>
+                <p:dialog id="statusDialog" widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                    <div class="loader">
+                        <img src="assets/img/logo.png" />
+                        <img src="assets/img/ajax-loader.gif" />
+                    </div>
+                </p:dialog>
+
+                <p:tabView>
+                    <p:tab title="مشخصات عمومی نسخه">
+                        <p:growl id="growl" showDetail="true" />
+
+                        <div class="formWrapper">
+                            <table class="fullWidth">
+                                <tr>
+                                    <td>نام پروژه:</td>
+                                    <td colspan="3">
+                                        <p:selectOneMenu value="#{versionControl.projectID}">
+                                            <p:ajax listener="#{versionControl.onProjectChange}" update="versiontree extensions changes" />
+                                            <f:selectItems value="#{versionControl.projectComboItem}" />
+                                        </p:selectOneMenu>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        <p:tree id="versiontree" value="#{versionControl.root}" var="vernode" dynamic="false" dir="rtl" selectionMode="single" selection="#{versionControl.versionOnProjectTree}">
+                                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                <h:outputText value="#{vernode.getName()}" />
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>نام نسخه:</td>
+                                    <td colspan="3">
+                                        <h:inputText value="#{versionControl.version.name}" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>توضیحات:</td>
+                                    <td colspan="5">
+                                        <p:inputTextarea value="#{versionControl.version.desccription}" rows="5" counter="desConter" maxlength="500" counterTemplate="{0}" autoResize="false" />
+                                        <h:outputText id="desConter" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </p:tab>
+
+                    <p:tab title="قابلیت های اضافه شده">
+                        <div class="formWrapper">
+                            <table class="fullWidth">
+                                <tr>
+                                    <td colspan="6">
+                                        <p:tree id="extensions" value="#{versionControl.extensionRoot}" var="extnode" dynamic="false" dir="rtl" selectionMode="checkbox" selection="#{versionControl.extensions}">
+                                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                <h:outputText value="#{extnode.getName()}" />
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </p:tab>
+
+                    <p:tab title="قابلیت های تغییر کرده">
+                        <div class="formWrapper">
+                            <table class="fullWidth">
+                                <tr>
+                                    <td colspan="6">
+                                        <p:tree id="changes" value="#{versionControl.changesRoot}" var="chngnode" dynamic="false" dir="rtl" selectionMode="checkbox" selection="#{versionControl.changes}">
+                                            <p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+                                                <h:outputText value="#{chngnode.getName()}" />
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </p:tab>
+
+                    <p:tab title="خطاهای برطرف شده">
+                        <div class="tableWrapper">
+                            <p:dataTable scrollRows="20" scrollable="true" widgetVar="bugtable" scrollHeight="300" value="#{versionControl.bugList}" id="bugstable" var="bugs" selection="#{versionControl.bugs}" emptyMessage="موردی با این مشخصات یافت نشد." rowKey="#{bugs.id}">
+                                <p:column selectionMode="multiple" width="20" />
+
+                                <p:column filterBy="#{bugs.id}" filterMatchMode="contains" width="70" filterStyle="width: 60px;">
+                                    <f:facet name="header">شناسه</f:facet>
+                                        #{bugs.id}
+                                </p:column>
+
+                                <p:column filterBy="#{bugs.title}" filterMatchMode="contains" width="110" filterStyle="width: 100px;">
+                                    <f:facet name="header">عنوان</f:facet>
+                                        #{bugs.title}
+                                </p:column>
+
+                                <p:column filterBy="#{bugs.tbugtype}" filterMatchMode="in" width="80" filterStyle="width: 60px;">
+                                    <f:facet name="filter">
+                                        <p:selectCheckboxMenu id="bugtype" label="نوع خطا" onchange="PF('bugtable').filter()">
+                                            <f:selectItem itemLabel="بحرانی" itemValue="C" />
+                                            <f:selectItem itemLabel="اصلی" itemValue="J" />
+                                            <f:selectItem itemLabel="معمولی" itemValue="N" />
+                                            <f:selectItem itemLabel="پایین" itemValue="M" />
+                                        </p:selectCheckboxMenu>
+                                    </f:facet>
+                                    <h:outputText value="#{bugs.tbugtype.name}" />
+                                </p:column>
+
+                                <p:column filterBy="#{bugs.tbugstate.name}" filterMatchMode="in" width="100" filterStyle="width: 90px;">
+                                    <f:facet name="filter">
+                                        <p:selectCheckboxMenu id="bugstate" label="وضعیت خطا" onchange="PF('bugtable').filter()">
+                                            <f:selectItems value="#{bugControl.bugStateForFilter}" />
+                                        </p:selectCheckboxMenu>
+                                    </f:facet>
+                                    <h:outputText value="#{bugs.tbugstate.name}" />
+                                </p:column>
+
+                                <p:column class="colActions" width="80">
+                                    <f:facet name="header">عملیات</f:facet>
+                                    <p:commandButton class="fa fa-eye" title="نمایش خطا" actionListener="#{bugControl.viewBugDialog(bugs)}">
+                                        <f:setPropertyActionListener value="#{bugs}" target="#{bugControl.bug}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+
+                        <div class="dialogActions">
+                            <p:commandButton class="btn btnDefault" value="ثبت" action="#{versionControl.insertVersion()}" update="growl" />
+                            <p:commandButton class="btn btnDefault" actionListener="#{versionControl.closeDialog('createVersion')}" value="بازگشت" />
+                        </div>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

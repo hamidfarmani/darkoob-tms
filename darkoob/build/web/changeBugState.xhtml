@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>تغییر وضعیت خطا</title>
+        <link rel="stylesheet" href="assets/css/dialogs.css" />
+    </h:head>
+    <h:body>
+        <div class="dialogContainer">
+            <h:form>
+                <p:growl id="growl" showDetail="true" />
+                
+                <div class="formWrapper">
+                    <table>
+                        <tr>
+                            <td>وضعیت خطا:</td>
+                            <td colspan="3">
+                                <p:selectOneMenu value="#{bugControl.bugState}">
+                                    <f:selectItems value="#{bugControl.bugStateComboItem}" />
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="dialogActions">
+                    <p:commandButton class="btn btnDefault" value="تغییر وضعیت خطا" action="#{bugControl.changeBugState()}" update="growl" />
+                    <p:commandButton class="btn btnDefault" actionListener="#{bugControl.closeDialog('changeBugState')}" value="بازگشت" />
+                </div>
+            </h:form>
+        </div>
+    </h:body>
+
+</html>

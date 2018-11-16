@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<title>اضافه کردن کاربر جدید</title>
+	<link rel="stylesheet" href="assets/css/dialogs.css" />
+</h:head>
+<h:body>
+	<div class="dialogContainer">
+		<h:form>
+			<p:growl id="growl" showDetail="true" />
+
+			<div class="formWrapper">
+				<table>
+					<tr>
+						<td>نام کامل:</td>
+						<td colspan="3">
+							<h:inputText value="#{userControl.user.fullname}" />
+						</td>
+					</tr>
+					<tr>
+						<td>نام کاربری:</td>
+						<td colspan="3">
+							<h:inputText value="#{userControl.user.username}" />
+						</td>
+					</tr>
+					<tr>
+						<td>گذرواژه:</td>
+						<td colspan="3">
+							<h:inputSecret value="#{userControl.user.password}" />
+						</td>
+					</tr>
+					<tr>
+						<td>تکرار گذرواژه:</td>
+						<td colspan="3">
+							<h:inputSecret value="#{userControl.passCheck}" />
+						</td>
+					</tr>
+					<tr>
+						<td>نوع کاربر:</td>
+						<td colspan="3">
+							<p:selectOneRadio id="testType" value="#{userControl.user.roleid}">
+								<f:selectItem itemLabel="مدیر" itemValue="1" />
+								<f:selectItem itemLabel="کاربر" itemValue="2" />
+							</p:selectOneRadio>
+						</td>
+					</tr>
+					<tr>
+						<td>معتبر از:</td>
+						<td colspan="3">
+							<p:calendar value="#{userControl.user.validfrom}"></p:calendar>
+						</td>
+					</tr>
+					<tr>
+						<td>معتبر تا:</td>
+						<td colspan="3">
+							<p:calendar value="#{userControl.user.validto}"></p:calendar>
+						</td>
+					</tr>
+					<tr>
+						<td>توضیحات:</td>
+						<td colspan="5">
+							<p:inputTextarea value="#{userControl.user.descrption}" rows="5" cols="55" counter="userDesCounter" maxlength="500" counterTemplate="{0}" autoResize="false" />
+							<h:outputText id="userDesCounter" />
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="dialogActions">
+				<p:commandButton class="btn btnDefault" value="ثبت" action="#{userControl.insertUser()}" update="growl" />
+				<p:commandButton class="btn btnDefault" actionListener="#{userControl.closeDialog('createUser')}" value="بازگشت" />
+			</div>
+		</h:form>
+	</div>
+</h:body>
+
+</html>

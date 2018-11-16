@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>اضافه کردن نوع پروژه جدید</title>
+        <link rel="stylesheet" href="assets/css/element.css"/>
+        <link rel="stylesheet" href="assets/css/main.css"/>
+    </h:head>
+    <h:body dir="rtl">
+        <h:form>
+            <p:growl id="growl" showDetail="true"/>
+            <table>
+                <tr>
+                    <td>
+                        نام: 
+                    </td>
+
+                    <td>
+                        <h:inputText class="InputField" value="#{projecttreetypeControl.projecttreetype.name}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        توضیحات: 
+                    </td>
+
+                    <td>
+                        <p:inputTextarea class="textArea" value="#{projecttreetypeControl.projecttreetype.description}" rows="5" cols="100" counter="display" maxlength="500" counterTemplate="{0}" autoResize="false" />
+                        <h:outputText class="counter" id="display" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <p:commandButton class="btnb" value="ثبت" action="#{projecttreetypeControl.insertProjecttreetype()}" update="growl"/>
+                        <p:commandButton class="btnb" actionListener="#{projecttreetypeControl.closeDialog('createProjecttreeType')}" value="بازگشت"/>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </h:body>
+</html>
+

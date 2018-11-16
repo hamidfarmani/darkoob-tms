@@ -1,0 +1,644 @@
+@import url(http://fonts.googleapis.com/earlyaccess/droidarabickufi.css);
+@import url(http://fonts.googleapis.com/earlyaccess/droidarabicnaskh.css);
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
+
+
+
+/* Fundamental */
+*, *:before, *:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html {
+    direction: rtl;
+}
+body {
+    font-family: 'Droid Arabic Naskh', 'Raleway';
+    font-size: 12px;
+}
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+}
+ul, ol {
+    list-style: none;
+}
+
+
+
+
+
+
+/* Loader */
+.loader {
+	text-align: center;
+}
+.loader img {
+	display: block;
+	margin: 0 auto;
+	padding: 0;
+}
+
+
+
+
+
+
+/* Dialog Container */
+.dialogContainer {
+	padding: 10px;
+}
+.dialogContainer {
+	overflow: hidden;
+	padding: 10px;
+}
+.dialogContainer .ui-tabs {
+	
+}
+.dialogContainer .ui-tabs .ui-tabs-nav {
+	border-bottom: 1px solid #DDD;
+	height: 40px;
+	width: 100%;
+	overflow: hidden;
+	padding: 0 5px;
+}
+.dialogContainer .ui-tabs .ui-tabs-nav li {
+	float: right;
+	height: 40px;
+	border-radius: 2px 2px 0 0;
+	overflow: hidden;
+}
+.dialogContainer .ui-tabs .ui-tabs-nav li > a {
+	display: block;
+	height: 40px;
+	padding: 0 20px;
+	color: #444;
+	line-height: 40px;
+	background-color: #EEE;
+}
+.dialogContainer .ui-tabs .ui-tabs-nav li.ui-state-active > a {
+	background-color: #DDD;
+	cursor: default;
+}
+.dialogContainer table.fullWidth {
+	width: 100%;
+}
+.dialogContainer .tableWrapper table {
+	table-layout: fixed;
+	width: 100%;
+}
+.dialogContainer .dialogActions {
+	padding: 20px 0 0;
+}
+.dialogContainer .dialogActions .btn {
+	border-radius: 2px;
+	padding: 0 20px;
+	height: 28px;
+	font-family: 'Droid Arabic Kufi', 'Raleway';
+	margin-left: 5px;
+	font-size: 13px;
+}
+.dialogContainer .dialogActions .btnDefault {
+	background-color: #FFF;
+	border: 1px solid #DDD;	
+}
+
+
+
+
+
+/* Form Wrapper */
+.formWrapper table {
+    table-layout: fixed;
+}
+.formWrapper tr {
+    
+}
+.formWrapper td {
+    padding: 0 0 2px 10px;
+    line-height: 26px;
+    min-height: 30px;
+    height: auto;
+}
+.formWrapper td td {
+    padding: 0 0 0 5px;
+}
+.formWrapper td input[type="text"],
+.formWrapper td input[type="password"] {
+    font-family: 'Droid Arabic Naskh', 'Raleway';
+    font-size: 12px;
+    height: 28px;
+    background-color: #FFF;
+    border-radius: 2px;
+    border: 1px solid #DDD;
+    padding: 0 5px;
+    min-width: 150px;
+}
+.formWrapper td textarea {
+    font-family: 'Droid Arabic Naskh', 'Raleway';
+    font-size: 12px;
+    background-color: #FFF;
+    border-radius: 2px;
+    border: 1px solid #DDD;
+    padding: 5px 10px;
+    width: 100%;
+	resize: vertical;
+}
+.formWrapper td .ui-selectonemenu {
+	border: 1px solid #DDD;
+}
+
+
+
+
+
+
+/* Table Wrapper */
+.tableWrapper table {
+    direction: rtl;
+}
+.tableWrapper thead {
+
+}
+.tableWrapper tbody {
+
+}
+.tableWrapper tr {
+    background-color: #EEE;
+}
+.tableWrapper tr:nth-child(2n) {
+    background-color: #DDD;
+}
+.tableWrapper thead th {
+    background-color: #CCC;
+    padding: 5px 15px;
+    border-width: 0 0 0 1px;
+    border-color: #FFF;
+    font-weight: 400;
+    text-align: center;
+}
+.tableWrapper.noHeader thead th {
+	display: none;
+}
+.tableWrapper thead th:last-child {
+    border: none;
+}
+.tableWrapper thead th input {
+    font-family: 'Droid Arabic Naskh', 'Raleway';
+    font-size: 12px;
+    padding: 2px 6px;
+    margin: 5px auto !important;
+	border: none;
+	border-radius: 2px;
+}
+.tableWrapper tbody td {
+    padding: 8px 15px;
+    border-width: 0 0 0 1px;
+    border-color: #FFF;
+}
+.tableWrapper tbody td:last-child {
+    border: none;
+}
+.tableWrapper td.ui-selection-column .ui-chkbox {
+    position: relative;
+    top: 2px;
+}
+.tableWrapper .colActions {
+    text-align: center !important;
+}
+.tableWrapper .colActions button {
+    height: 24px;
+    padding: 0 5px;
+    float: right;
+    border: 0;
+    background-color: #BBB;
+    margin-left: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.tableWrapper .colActions input[type="submit"] {
+    background-color: #BBB;
+    border: none;
+    padding: 2px 10px;
+    font-family: 'Droid Arabic Naskh';
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.tableWrapper .colActions button span {
+    display: none;
+}
+
+
+
+
+
+
+/* File Uploader */
+.ui-fileupload {
+	margin-bottom: 20px;
+	border: 1px solid #DDD;
+	border-radius: 2px;
+}
+.ui-fileupload .ui-fileupload-buttonbar {
+	padding: 10px 10px;
+	background-color: #EEE;
+}
+.ui-fileupload .ui-fileupload-choose {
+	background-color: #DDD;
+	border-radius: 2px;
+	height: 30px;
+	line-height: 30px;
+}
+.ui-fileupload .ui-icon-plusthick {
+	width: 20px;
+	height: 20px;
+}
+.ui-fileupload .ui-button-text {
+	padding: 0 15px 0 30px;
+	height: 30px;
+	line-height: 30px;
+}
+.ui-fileupload .ui-fileupload-content {
+	padding: 10px 20px;
+}
+.ui-fileupload .ui-fileupload-files {
+	
+}
+.ui-fileupload .ui-fileupload-files table {
+	
+}
+.ui-fileupload .ui-fileupload-files tr {
+	
+}
+
+
+
+
+
+
+
+/* Icons */
+.ui-icon-plusthick {
+	background-image: url("../img/icons.png");
+	width: 16px;
+	height: 16px;
+	background-position: -32px -128px;
+}
+.ui-icon-check {
+	background-image: url("../img/icons.png");
+	width: 16px;
+	height: 16px;
+	background-position: -64px -144px;
+}
+
+
+
+
+
+/* Elements */
+.ui-chkbox {
+	height: 16px;
+}
+.ui-chkbox .ui-chkbox-box {
+	background-color: #BBB;
+}
+.ui-chkbox .ui-chkbox-box.ui-state-active {
+	
+}
+.ui-chkbox .ui-chkbox-icon {
+	
+}
+.ui-radiobutton {
+	
+}
+.ui-radiobutton .ui-radiobutton-box {
+    width: 16px;
+    height: 16px;
+    background-color: #FFF;
+    border-radius: 100%;
+    border: 1px solid #DDD;
+}
+.ui-radiobutton .ui-radiobutton-box.ui-state-hover {
+    background-color: #DDD;
+    border: 1px solid #CCC;
+}
+.ui-radiobutton .ui-radiobutton-box > span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    position: relative;
+    top: 3px;
+    right: 3px;
+    background-color: #FFF;
+    border-radius: 100%;
+}
+.ui-radiobutton .ui-radiobutton-box.ui-state-active > span {
+    background-color: #555;
+}
+
+
+
+
+
+/* Select One Menu */
+.ui-selectonemenu {
+    background-color: #FFF;
+	border: none;
+    border-radius: 2px;
+    padding: 0 10px;
+	width: 200px !important;
+}
+.ui-selectonemenu .ui-selectonemenu-label {
+    text-align: right;
+	width: 160px !important;
+}
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    position: absolute;
+    left: 0;
+    right: auto;
+}
+.ui-selectonemenu .ui-selectonemenu-trigger:before {
+    content: "\f107";
+    font-family: 'FontAwesome';
+    position: relative;
+    top: 4px;
+    left: 5px;
+}
+.ui-selectonemenu .ui-selectonemenu-trigger span {
+	
+}
+.ui-selectonemenu-panel {
+	text-align: right;
+    background-color: #FFF;
+    padding: 0;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container {
+	width: 100%;
+	background-color: #DDD;
+	padding: 8px 10px;
+	position: relative;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container input {
+	width: 100%;
+	background-color: #FFF;
+	border: 1px solid #CCC;
+	border-radius: 2px;
+	font-family: 'Droid Arabic Naskh', 'Raleway';
+	font-size: 11px;
+	padding-right: 20px;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-filter-container span {
+	background-image: url("../img/icons.png");
+	width: 16px;
+	height: 16px;
+	top: 16px !important;
+	background-position: -160px -112px;
+	margin-right: 5px;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-items-wrapper {
+	overflow-x: auto;
+    padding: 5px 0;
+	width: 200px !important;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list {
+    padding: 0 10px;
+    margin: 0;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list-item {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    text-align: right;
+    height: 26px;
+    line-height: 26px;
+}
+
+
+
+
+
+
+
+/* Select CheckBox Menu */
+.ui-selectcheckboxmenu {
+	background-color: #FFF;
+    border: none;
+    border-radius: 2px;
+    padding: 0;
+	height: 30px;
+	line-height: 30px;
+}
+.ui-selectcheckboxmenu .ui-selectcheckboxmenu-label-container {
+    display: block;
+    text-align: right;
+    color: #333;
+    padding: 0 10px 0 25px;
+}
+.ui-selectcheckboxmenu .ui-selectcheckboxmenu-label {
+    padding: 0;
+}
+.ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    right: auto;
+}
+.ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger:before {
+    font-family: 'FontAwesome';
+    content: "\f107";
+}
+.ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger span {
+	
+}
+.ui-selectcheckboxmenu-panel {
+    text-align: right;
+    background-color: #FFF;
+    padding: 0;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header {
+    background-color: #EEE;
+    padding: 10px;
+    margin: 0 0 5px;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+	float: right;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header a.ui-selectcheckboxmenu-close,
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header a.ui-selectcheckboxmenu-close.ui-state-hover {
+    padding: 0;
+    margin: 0;
+    background-color: #DDD;
+    border-radius: 2px;
+    color: #333;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+	float: left;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header a.ui-selectcheckboxmenu-close:before {
+    font-family: 'FontAwesome';
+    content: "\f00d";
+	display: block;
+	font-size: 11px;
+	line-height: 16px;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-items-wrapper {
+    overflow-x: auto;
+    padding: 5px 0;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list {
+	
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list-item {
+    height: 26px;
+    padding: 0 10px;
+    line-height: 26px;
+    text-align: right;
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list-item .ui-chkbox {
+    
+}
+.ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list-item label {
+    padding: 0 22px 0 5px;
+}
+
+
+
+
+
+
+
+
+/* UI Tree */
+.ui-tree {
+    
+}
+.ui-tree .ui-icon {
+    background-image: url("../img/icons.png");
+    width: 16px;
+    height: 16px;
+    vertical-align: top;
+}
+.ui-tree .ui-icon-triangle-1-w {
+    background-position: -96px -16px;
+}
+.ui-tree .ui-icon-triangle-1-s {
+    background-position: -64px -16px;
+}
+.ui-tree .ui-icon-folder-collapsed {
+    background-position: 0 -96px;
+}
+.ui-tree .ui-icon-check {
+    background-position: -64px -144px;
+}
+.ui-tree .ui-icon-minus {
+    background-position: -48px -128px;
+}
+.ui-tree .ui-icon-folder-open {
+    background-position: -16px -96px;
+}
+.ui-tree .ui-chkbox {
+    padding-left: 5px;
+}
+.ui-tree .ui-chkbox-box {
+    background-color: #EEE;
+    border-radius: 2px;
+    border: 1px solid #DDD;
+    top: 0 !important;
+}
+.ui-tree .ui-chkbox-icon {
+    position: relative;
+    top: -2px;
+    right: -1px;
+}
+.ui-tree .ui-treenode-label {
+    vertical-align: top;
+    margin: 0 5px 0 0;
+    padding: 0 5px 0 10px;
+    position: relative;
+    top: -3px;
+}
+.ui-tree .ui-treenode-label.ui-state-highlight {
+    background-color: #DDD;
+    border-radius: 2px;
+}
+
+
+
+
+
+/* Growl */
+.ui-growl {
+	
+}
+.ui-growl .ui-growl-item-container {
+	background-color: #E6B8B8;
+	border-radius: 2px;
+	opacity: 1;
+}
+.ui-growl .ui-growl-item {
+	
+}
+.ui-growl .ui-growl-image {
+	
+}
+.ui-growl .ui-growl-message {
+	
+}
+.ui-growl .ui-growl-message .ui-growl-title {
+	font-family: 'Droid Arabic Kufi';
+	font-size: 14px;
+	font-weight: 400;
+}
+.ui-growl .ui-growl-message p {
+	font-size: 11px;
+}
+
+
+
+
+
+/* Miscleanus */
+.ui-datatable-scrollable-header-box {
+	
+}
+.ui-datatable-scrollable-body {
+	direction: ltr;
+}
+
+
+
+
+
+
+/* Uncategorized */
+.formWrapper .ui-chkbox .ui-chkbox-box {
+    background-color: #FFF;
+    border: 1px solid #DDD;
+    position: relative;
+    top: 4px;
+}
+.formWrapper .ui-chkbox .ui-icon-check {
+    background-position: -64px -144px;
+    background-image: url("../img/icons.png");
+    width: 16px;
+    height: 16px;
+    vertical-align: top;
+    position: relative;
+    top: -1px;
+    right: -2px;
+}
+
+.formWrapper .ui-tree-container {
+    background-color: #FFF;
+    padding: 20px 20px 10px;
+    border-radius: 2px;
+    border: 1px solid #DDD;
+    height: 200px;
+    overflow: auto;
+}
+.formWrapper .ui-tree {
+    width: 100%;
+}
